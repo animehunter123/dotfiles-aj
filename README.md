@@ -42,7 +42,7 @@ journalctl -fu myservice01 <-- TAILs a LINUX SERVICE LOG
 dpkg -l <-- list installed apps
 printf 'hello\nworld'
 arping
-ls ltrahS <-- Largest File @ Bottom
+ls -ltrahS <-- Largest File @ Bottom with S argument
 sed '/^$/d' <-- delete empy lines
 sort -u <-- sort | uniq
 
