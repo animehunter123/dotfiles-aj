@@ -7,6 +7,7 @@ My Dotfiles for:
 | Terminator                   | ~/.config/terminator  | Terminator w/Ub     |
 | VMware Workstation Autostart | ~/.config/autostart   | Autostarting a VM.  |
 | Zsh                          | ~/.zshrc              | LiveCD config.      |
+| Nvim                         | ~/.config/nvim        | Just Nvim + Telescope | 
 
 <h2>
         
