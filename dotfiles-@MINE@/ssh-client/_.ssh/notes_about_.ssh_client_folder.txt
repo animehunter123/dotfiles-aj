@@ -1,4 +1,6 @@
-* In ~/.ssh/config, i have:
+#Linux SSH Client Configs
+
+* In ~/.ssh/config, i have the below (ssh1,ssh2):
 
 ```
 Host *
@@ -6,13 +8,17 @@ Host *
   UserKnownHostsFile /dev/null
   IdentityFile ~/.ssh/id_rsa
 
-#Workaround for really REALLY REALLY OLD OBSOLETE INSECURE UNSAFE... server VM's
-Ciphers +aes128-ct,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc
+  HostKeyAlgorithms *
+  PubkeyAcceptedKeyTypes *
 
-#Workaround for KEX Really really BAD OBSOLETE HORRIBLE BAD THING TO DO:
-KexAlgorithms +diffie-hellman-group-exchange-sha1,diffie-hellman-group15-sha1,diffie-hellman-group1-sha1
+  # Bad Workaround for really REALLY REALLY OLD OBSOLETE INSECURE UNSAFE... server VM's
+  Ciphers +aes128-ct,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc
+  
+  # Bad Workaround for KEX Really really BAD OBSOLETE HORRIBLE BAD THING TO DO:
+  # NOT USED -- KexAlgorithms +diffie-hellman-group-exchange-sha1,diffie-hellman-group15-sha1,diffie-hellman-group1-sha1
 ```
 
-* In C:\Users\%usernameOfMe%\.ssh\puttyMaster.ppk
+#Windows SSH Putty Configs:
+* In C:\Users\%username%\.ssh\puttyMaster.ppk
 
-I have a id_*pub generated ppk key used to ssh into all of the old servers.
+* You can then use the id_*pub generated ppk key used to ssh.
