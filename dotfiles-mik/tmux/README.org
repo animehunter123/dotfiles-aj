@@ -1,0 +1,269 @@
+#+TITLE: tmux config
+#+AUTHOR: mike
+#+PROPERTY: header-args :tangle ./tmux.conf
+# manual tangle by: C-c C-v t
+# autotangle needs this plugin to work: https://github.com/yilkalargaw/org-auto-tangle
+#+auto_tangle: t
+#+STARTUP: showeverything
+
+*   Table Of Contents :toc:
+- [[#about-tmux][About tmux]]
+  - [[#package-manager][Package Manager]]
+  - [[#status-bar][Status Bar]]
+  - [[#colors][Colors]]
+  - [[#command-prefix][Command Prefix]]
+  - [[#general-settings][General Settings]]
+  - [[#creating-and-naming-windows][Creating and Naming Windows]]
+  - [[#navigation][Navigation]]
+  - [[#creatingsplitting-windows][Creating/Splitting Windows]]
+  - [[#resize-windows][Resize Windows]]
+  - [[#multi-exec][Multi-Exec]]
+  - [[#theme][Theme]]
+  - [[#tpm][tpm]]
+- [[#launching-tmux-with-script][Launching tmux with Script]]
+  - [[#detaching][Detaching]]
+  - [[#reattaching][Reattaching]]
+
+* About tmux
+A terminal multiplexer. Configuration file goes in $HOME/.config/tmux/tmux.conf
+Currently using version 3.3a
+
+** Package Manager
+Using the *tpm* package manager - https://github.com/tmux-plugins/tpm
+Install tpm like so:
+
+#+begin_example
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+#+end_example
+
+Put this at the /bottom/ of tmux.conf
+#+begin_example
+# List of plugins
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-sensible'
+
+# Other examples:
+# set -g @plugin 'github_username/plugin_name'
+# set -g @plugin 'github_username/plugin_name#branch'
+# set -g @plugin 'git@github.com:user/plugin'
+# set -g @plugin 'git@bitbucket.com:user/plugin'
+
+# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
+run '~/.tmux/plugins/tpm/tpm'
+#+end_example
+
+Reload tmux enviornment
+#+begin_example
+# type this in terminal if tmux is already running
+tmux source ~/.config/tmux/tmux.conf
+#+end_example
+
+*** Installing new plugins
+If you add new plugins, you will need to have tpm install them.
+
+#+begin_example
+<prefix> I
+# in my case, C-a I
+#+end_example
+
+
+** Status Bar
+Customization for the tmux status bar
+
+#+begin_src conf
+## to see the colors in bash
+#for i in {0..255} ; do
+#    printf "\x1b[38;5;${i}mcolour${i}\n"
+#done
+
+# selected window colors
+setw -g window-status-style bg=colour0,fg=colour34
+
+# non-selected window colors
+set -g status-left-style bg=colour10,fg=colour0
+
+set -g status-bg black
+set -g status-fg white
+# refresh rate in seconds
+set -g status-interval 5
+set -g status-left-length 90
+set -g status-right-length 60
+set  -g status-right '#[fg=colour14]#(tmux-mem-cpu-load 1) #[fg=colour6]#(uptime | cut -f 4-5 -d " " | cut -f 1 -d ",") up #[fg=colour2,bg=default]%a %l:%M:%S %p#[default] #[fg=colour33]%Y-%m-%d'
+set-window-option -g window-status-current-style bg=colour81,fg=colour16
+#+end_src
+
+** Colors
+#+begin_src conf
+# color
+set -g default-terminal "tmux-256color"
+#set -g default-terminal "alacritty"
+
+#set pane colors - hilight the active pane
+set-option -g pane-active-border-style fg=green
+
+# set the terminal color to 24-bit color
+# basically, make the colors the same when inside of tmux and not
+set-option -sa terminal-overrides ",xterm*:Tc"
+#+end_src
+
+** Command Prefix
+Use Ctrl-a as the command prefix. The default is C-b, but I was used to screen
+#+begin_src conf
+set-option -g prefix C-a
+bind-key C-a last-window
+#+end_src
+
+** General Settings
+#+begin_src conf
+# Start window numbering at 1 as it is easier to navigate from keyboard
+set -g base-index 1
+
+# Allows for faster key repetition
+set -s escape-time 0
+
+# Rather than constraining window size to the maximum size of any client
+# connected to the *session*, constrain window size to the maximum size of any
+# client connected to *that window*. Much more reasonable.
+setw -g aggressive-resize on
+
+# reload config
+bind r source-file ~/.tmux.conf \; display-message "Config reloaded..."
+
+# notes
+# C-a ' <-- will prompt for an index. this is how to get to window 10 and beyond
+#           or use C-a n for next and C-a p for pervious
+#+end_src
+
+** Creating and Naming Windows
+#+begin_src conf
+# creates a new window but lets you name it first
+# C-a c will create a new window with default name
+#  note: C-a . will let you rename the current window
+# C-a C will create a new window and prompt for name
+bind-key C command-prompt -p "Name of new window: " "new-window -n '%%'"
+
+# auto window rename
+# if you have 3 windows (1, 2, and 3) and #2 is closed, this will make
+# window #3 get renamed to 2. if this was not set, you would be left with
+# windows 1 and 3
+# reorder windows
+set-option -g renumber-windows on
+
+#https://man.openbsd.org/OpenBSD-current/man1/tmux.1#automatic-rename
+set-window-option -g automatic-rename
+
+# do not automatically rename the tab
+set-option -g allow-rename off
+#+end_src
+
+** Navigation
+Widnow navigation as well as copy/paste
+
+#+begin_src conf
+# vim copy/paste mode
+set-window-option -g mode-keys vi
+#bind-key -t vi-copy 'v' begin-selection
+#bind-key -t vi-copy 'y' copy-selection
+
+# Allows us to use C-a a <command> to send commands to a TMUX session inside
+# another TMUX session
+bind-key a send-prefix
+
+# hjkl (left/down/up/righ) pane traversal
+# if you have a split vertical window, C-a j will go to the window below and
+# C-a k will move to the window above
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+#+end_src
+
+** Creating/Splitting Windows
+Commands to create or split a window either vertically or horizontally. Also, start in fish shell
+
+#+begin_src conf
+bind-key c new-window fish
+bind-key v split-window -h -v fish
+bind-key h split-window -v fish
+#+end_src
+
+** Resize Windows
+To resize a window use C-a and C arrow key for direction but it's a bit tricky.
+Press Ctrl-a and let go of a, but keep Ctrl pressed and press arrow key
+
+** Multi-Exec
+This allows the typing in multiple windows at the same time. Maybe you need to run some
+command on multiple servers. You could open ssh sessions to the servers and then type
+the same command in all windows.
+
+#+begin_src conf
+# shortcut for synchronizing panes
+bind e setw synchronize-panes on
+bind E setw synchronize-panes off
+#+end_src
+
+** Theme
+Using the catppuccin theme
+
+#+begin_example
+set -g @catppuccin_status_right_separator_inverse "yes"
+set -g @catppuccin_status_fill "all"
+set -g @catppuccin_status_connect_separator "no"
+set -g @catppuccin_window_default_fill "none"
+set -g @catppuccin_window_current_fill "all"
+#+end_example
+
+*** Date and Time
+#+begin_src conf
+set -g @catppuccin_date_time "%Y-%m-%d %H:%M:%S"
+#+end_src
+
+** tpm
+Per tpm docs, this should go a the bottom of config
+
+Other plugins can be installed like this:
+#+begin_example
+Other examples:
+set -g @plugin 'github_username/plugin_name'
+set -g @plugin 'github_username/plugin_name#branch'
+set -g @plugin 'git@github.com:user/plugin'
+set -g @plugin 'git@bitbucket.com:user/plugin'
+set -g @plugin 'catppuccin/tmux'
+#+end_example
+
+#+begin_src conf
+set -g @plugin 'tmux-plugins/tpm'
+#set -g @plugin 'tmux-plugins/tmux-sensible'
+set -g @plugin 'dreamsofcode-io/catppuccin-tmux'
+
+# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
+run '~/.tmux/plugins/tpm/tpm'
+#+end_src
+
+* Launching tmux with Script
+Use this script to launch tmux
+The ~-n~ option is to name the window
+The ~-c~ option changes to the specified directory
+
+#+begin_example
+#!/bin/sh
+
+SESSION=mike
+echo "creating session '${SESSION}'"
+
+tmux new-session -s $SESSION -d -n code -c ~/devel fish
+tmux new-window -t $SESSION -d -n compile -c ~/devel fish
+tmux new-window -t $SESSION -d -n home -c ~/ fish
+tmux select-window -t code
+tmux -2 attach-session -t $SESSION
+#+end_example
+
+** Detaching
+To detach from the running tmux session use C-a d
+
+** Reattaching
+To attach to a session use
+
+#+begin_example
+tmux attach-session -t <session-name>
+#+end_example

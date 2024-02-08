@@ -1,0 +1,1 @@
+Pulover has a nice macro creater, see his github page to record a macro to a AHK file.

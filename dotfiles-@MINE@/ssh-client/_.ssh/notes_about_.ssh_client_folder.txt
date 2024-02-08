@@ -1,0 +1,18 @@
+* In ~/.ssh/config, i have:
+
+```
+Host *
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+  IdentityFile ~/.ssh/id_rsa
+
+#Workaround for really REALLY REALLY OLD OBSOLETE INSECURE UNSAFE... server VM's
+Ciphers +aes128-ct,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc
+
+#Workaround for KEX Really really BAD OBSOLETE HORRIBLE BAD THING TO DO:
+KexAlgorithms +diffie-hellman-group-exchange-sha1,diffie-hellman-group15-sha1,diffie-hellman-group1-sha1
+```
+
+* In C:\Users\%usernameOfMe%\.ssh\puttyMaster.ppk
+
+I have a id_*pub generated ppk key used to ssh into all of the old servers.

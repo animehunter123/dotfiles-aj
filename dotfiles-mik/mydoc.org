@@ -1,0 +1,112 @@
+#+title: My Documentation
+#+AUTHOR: mike
+#+STARTUP: showeverything
+
+* Table Of Contents :toc:
+- [[#docker][Docker]]
+  - [[#save-and-load-image][Save and Load Image]]
+- [[#mongodb][MongoDB]]
+  - [[#using-version-50][Using version 5.0]]
+  - [[#export-from-docker][Export From Docker]]
+  - [[#import-to-docker][Import to Docker]]
+  - [[#mongo-shell][Mongo Shell]]
+  - [[#uri][URI]]
+- [[#patch-files][Patch Files]]
+  - [[#creating-a-patch][Creating a Patch]]
+  - [[#apply-a-patch][Apply a Patch]]
+  - [[#undo-a-patch][Undo a Patch]]
+
+* Docker
+** Save and Load Image
+
+#+BEGIN_SRC shell
+docker save image:latest | bzip2 > myimage_latest.tar.bz2
+docker load < myimage_latest.tar.bz2
+#+END_SRC
+
+* MongoDB
+
+** Using version 5.0
+Setup a mongodb docker container
+
+#+BEGIN_SRC shell
+docker pull mongodb:5.0
+mkdir ~/mongodb
+cp init-mongo.js ~/mongodb
+#+END_SRC
+
+** Export From Docker
+Export a database from a docker container to a flat file that can then be used
+to import in another docker container (basically transferring a database from
+on server to another)
+
+#+BEGIN_SRC shell
+docker exec <mongodb container> sh -c 'mongodump --authenticationDatabase admin -u <user> -p <password> --db <database> --archive' > db.dump
+#+END_SRC
+
+** Import to Docker
+Import a database that was exported from another docker container
+
+#+BEGIN_SRC shell
+docker exec -i <mongodb container> sh -c 'mongorestore --authenticationDatabase admin -u <user> -p <password> --db <database> --archive' < db.dump
+#+END_SRC
+
+** Mongo Shell
+To get to the mongo shell in a docker container. Assumption is the docker container is up and running
+
+#+BEGIN_SRC shell
+docker exec -it mongodb /bin/sh
+mongo -u <user> <database>
+#+END_SRC
+
+** URI
+The URI needed to connect to the mongo database. The example below is for fish shell
+
+#+BEGIN_SRC shell
+set -x MONGODB_URI mongodb://<user>:<pass>@<host>:27017/<db_name>
+#+END_SRC
+
+* Patch Files
+Using =diff= to create create/apply patches
+
+** Creating a Patch
+Create patch by running the following
+
+#+begin_example
+diff -u OriginalFile UpdatedFile > PatchFile
+#+end_example
+
+Assume you have a directory with some files and subdirectories inside.
+You recursively copy its content to some new directory and do the necessary updates in it.
+To create a patch file containing the modifications you’ve made, run the following command:
+
+#+begin_example
+diff -ruN OriginalDir UpdatedDir > PatchFile
+#+end_example
+
+
+** Apply a Patch
+Run the following to apply the patch
+
+#+begin_example
+patch OriginalFile < PatchFile
+#+end_example
+
+For a directory, run this:
+
+#+begin_example
+patch -p0 < PatchFile
+#+end_example
+
+
+** Undo a Patch
+To undo a patch, run the following
+
+#+begin_example
+patch -R OriginalFile < PatchFile
+#+end_example
+
+To undo for a directory, run this:
+#+begin_example
+patch -R -p0 OriginalFile < PatchFile
+#+end_example

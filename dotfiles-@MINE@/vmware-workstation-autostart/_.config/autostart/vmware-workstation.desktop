@@ -1,0 +1,12 @@
+[Desktop Entry]
+Categories=System;
+Comment=Run and manage virtual machines
+Encoding=UTF-8
+Exec=/usr/bin/vmware %U
+Hidden=true
+Icon=vmware-workstation
+MimeType=application/x-vmware-vm;application/x-vmware-team;application/x-vmware-enc-vm;x-scheme-handler/vmrc;
+Name=VMware Workstation
+StartupNotify=true
+Terminal=false
+Type=Application
