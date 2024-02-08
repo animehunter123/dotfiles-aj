@@ -1,4 +1,4 @@
-# Current Dotfiles:
+# [Latest DotFiles (Github)](https://github.com/animehunter123/dotfiles-aj):
 Notable used resource config files are...
 | Dotfile                      | Path                  | Description         |
 | :---                         |    :----:             |          ---:       |
