@@ -1,7 +1,7 @@
 # Current Dotfiles:
 | Dotfile                      | Path                  | Description         |
-| Autohotkey | -   | Auto minimizing VMs.  |
 | :---                         |    :----:             |          ---:       |
+| Autohotkey                   | N/A                   | Auto minimizing VMs |
 | Bash                         | ~/.bashrc             | LiveCD config.      |
 | Powershell                   | ~/.config/powershell  | LiveCD, and LM.     |
 | SSH Client  | ~/.ssh                | SSH Client Config   |
