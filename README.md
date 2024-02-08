@@ -17,7 +17,7 @@ Notable used resource config files are...
 
 * ```Ctrl + K >> V```, and this will preview a .MD file in your repo.
 
-* ```Ctrl + P >> @```, and you can jump to symbols in code.
+* ```Ctrl + P >> @```, and you can jump to ```SYMBOLS``` in code.
 
 * ```Ctrl + \ >> Ctrl + P + FILENAME```, and you got a Splitted View with 2 diff files.
 
