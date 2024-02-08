@@ -1,28 +1,29 @@
 # Current Dotfiles:
+Notable used resource config files are...
 | Dotfile                      | Path                  | Description         |
 | :---                         |    :----:             |          ---:       |
 | Autohotkey                   | N/A                   | Auto minimizing VMs |
 | Bash                         | ~/.bashrc             | LiveCD config.      |
+| Fish                         | ~/.config/fish/config.fish        | Fish Greetings | 
 | Powershell                   | ~/.config/powershell  | LiveCD, and LM.     |
 | SSH Client  | ~/.ssh                | SSH Client Config   |
 | Terminator                   | ~/.config/terminator  | Terminator w/Ub     |
 | VMware Workstation | ~/.config/autostart   | Autostarting VMs.  |
 | Zsh                          | ~/.zshrc              | LiveCD config.      |
-| Nvim                         | ~/.config/nvim        | Just Nvim + Telescope | 
 
 
 # Other Random Notes (VSCode):
-1. "." in github.com repo, and it will open vscode online in the repository you are in.
+* "." in github.com repo, and it will open vscode online in the repository you are in.
 
-2. Ctrl + K >> V, and this will preview a .MD file in your repo.
+* ```Ctrl + K >> V```, and this will preview a .MD file in your repo.
 
-3. Ctrl + P >> @, and you can jump to symbols in code.
+* ```Ctrl + P >> @```, and you can jump to symbols in code.
 
-4. Ctrl + \ >> Ctrl + P + FILENAME, and you got a Splitted View with 2 diff files.
+* ```Ctrl + \ >> Ctrl + P + FILENAME```, and you got a Splitted View with 2 diff files.
 
-5. Use ```git restore .``` instead of ```git reset --hard HEAD```
+* Use ```git restore .``` instead of ```git reset --hard HEAD```
 
-6. Deleting Empty Lines:
+* Deleting Empty Lines (in ```vscode``` or ```sed```):
 ```
 vscode: regex to delete empty lines:   ^(\s)*$\n
 sed:    sed '/^$/d' <-- delete empy lines
